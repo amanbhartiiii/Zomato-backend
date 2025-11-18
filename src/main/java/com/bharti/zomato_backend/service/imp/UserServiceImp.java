@@ -22,4 +22,12 @@ public class UserServiceImp implements UserService {
         User newUser = userRepo.save(user);
         return mapper.map(newUser, UserDto.class);
     }
+
+    @Override
+    public boolean isUserAlreadyExist(String email) {
+        User user = userRepo.findByEmail(email);
+        return user != null;
+    }
+
+
 }
