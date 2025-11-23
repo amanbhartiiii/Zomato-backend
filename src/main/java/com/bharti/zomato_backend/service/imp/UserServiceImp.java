@@ -6,10 +6,15 @@ import com.bharti.zomato_backend.repository.UserRepo;
 import com.bharti.zomato_backend.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImp implements UserService {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private ModelMapper mapper;
 
@@ -18,6 +23,8 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserDto register(UserDto userDto) {
+        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(encodedPassword);
         User user = mapper.map(userDto, User.class);
         User newUser = userRepo.save(user);
         return mapper.map(newUser, UserDto.class);
