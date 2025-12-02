@@ -15,6 +15,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/greet")
+    public String greet(){
+        return "Welcome to Zomato";
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody UserDto user) {
 
@@ -27,5 +32,13 @@ public class UserController {
 
         UserDto newUser = userService.register(user);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody UserDto user) {
+        if(userService.verify(user)) {
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Fail", HttpStatus.UNAUTHORIZED);
     }
 }
