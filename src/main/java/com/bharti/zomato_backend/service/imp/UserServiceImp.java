@@ -7,11 +7,8 @@ import com.bharti.zomato_backend.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +27,9 @@ public class UserServiceImp implements UserService {
     @Autowired
     private AuthenticationManager authManger;
 
+    @Autowired
+    private JWTService jwtService;
+
     @Override
     public UserDto register(UserDto userDto) {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
@@ -46,11 +46,14 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public boolean verify(UserDto user) {
+    public String verify(UserDto user) {
         Authentication authentication =
                 authManger.authenticate(
                         new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        return authentication.isAuthenticated();
+        if(authentication.isAuthenticated()) {
+            return jwtService.generateToken(user.getEmail());
+        }
+        return "Fail";
     }
 
 

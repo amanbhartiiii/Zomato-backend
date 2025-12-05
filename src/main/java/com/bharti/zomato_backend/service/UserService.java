@@ -5,5 +5,5 @@ import com.bharti.zomato_backend.dto.UserDto;
 public interface UserService {
     UserDto register(UserDto userDto);
     boolean isUserAlreadyExist(String email);
-    boolean verify(UserDto user);
+    String verify(UserDto user);
 }
