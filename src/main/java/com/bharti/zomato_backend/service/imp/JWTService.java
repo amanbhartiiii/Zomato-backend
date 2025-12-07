@@ -43,10 +43,6 @@ public class JWTService {
 
     }
 
-//    public boolean validateToken(String token) {
-//
-//    }
-
     public SecretKey getKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);

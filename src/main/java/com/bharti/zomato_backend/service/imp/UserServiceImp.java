@@ -27,11 +27,8 @@ public class UserServiceImp implements UserService {
     @Autowired
     private AuthenticationManager authManger;
 
-    @Autowired
-    private JWTService jwtService;
-
     @Override
-    public UserDto register(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         userDto.setPassword(encodedPassword);
         User user = mapper.map(userDto, User.class);
@@ -46,14 +43,15 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    public String verify(UserDto user) {
-        Authentication authentication =
-                authManger.authenticate(
-                        new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
-        if(authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getEmail());
-        }
-        return "Fail";
+    public boolean authenticateUser(UserDto user) {
+        Authentication authentication = authManger.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                user.getEmail(),
+                                user.getPassword()
+                        )
+        );
+        return authentication.isAuthenticated();
+
     }
 
 
