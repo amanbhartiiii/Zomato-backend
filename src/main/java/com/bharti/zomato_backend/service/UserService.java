@@ -6,4 +6,5 @@ public interface UserService {
     UserDto createUser(UserDto userDto);
     boolean isUserAlreadyExist(String email);
     String loginUser(UserDto user);
+    UserDto getUser(String email);
 }

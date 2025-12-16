@@ -66,4 +66,9 @@ public class UserServiceImp implements UserService {
             throw new BadCredentialsException("Invalid email or password!");
         }
     }
+
+    public UserDto getUser(String email) {
+        User user = userRepo.findByEmail(email).orElseThrow(()-> new UsernameNotFoundException("User not found"));
+        return  mapper.map(user, UserDto.class);
+    }
 }
